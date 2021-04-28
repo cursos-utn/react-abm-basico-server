@@ -3,6 +3,8 @@ const app = express();
 const uniqid = require('uniqid');
 const cors = require('cors');
 
+const PORT = process.env.PORT || 3001;
+
 app.use(express.json());
 app.use(cors());
 
@@ -37,4 +39,4 @@ app.delete('/api/personas/:id', (req, res) => {
     listado = listado.filter(item => item.id != req.params.id);
     res.json({});
 });
-app.listen(3001, () => console.log('App corriendo en el puerto 3001'));
+app.listen(PORT, () => console.log(`App corriendo en el puerto ${PORT}`));
