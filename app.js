@@ -1,0 +1,40 @@
+const express = require('express');
+const app = express();
+const uniqid = require('uniqid');
+const cors = require('cors');
+
+app.use(express.json());
+app.use(cors());
+
+let listado = [];
+
+app.get('/api/personas', (req, res) => {
+    res.json(listado);
+});
+
+app.get('/api/personas/:id', (req, res) => {
+    const itemFound = listado.find(item => item.id == req.params.id);
+    if (itemFound) res.json(itemFound);
+    else res.status(404).send();
+});
+
+app.post('/api/personas', (req, res) => {
+    const newItem = {
+        ...req.body,
+        id: uniqid(),
+    };
+    listado = [...listado, newItem];
+    res.json(newItem);
+});
+
+app.put('/api/personas/:id', (req, res) => {
+    const toUpdate = {...req.body, id: req.params.id};
+    listado = listado.map(item => (item.id == req.params.id ? toUpdate : item));
+    res.json(toUpdate);
+});
+
+app.delete('/api/personas/:id', (req, res) => {
+    listado = listado.filter(item => item.id != req.params.id);
+    res.json({});
+});
+app.listen(3001, () => console.log('App corriendo en el puerto 3001'));
